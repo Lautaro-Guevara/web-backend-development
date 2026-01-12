@@ -1,0 +1,17 @@
+
+
+nav ul{
+    display: grid;
+    background-color: #333;
+    padding: 10px;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+
+nav ul li{
+    display: grid;
+    justify-content: center;
+    color: white;
+}

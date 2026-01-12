@@ -1,0 +1,31 @@
+#top-header {
+    display: grid;
+    background-color: white;
+    color: black;
+    padding: 10px 0;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+}
+
+#top-header .siteName {
+    grid-column: 1;
+    justify-self: start;
+}
+
+#top-header .siteName a {
+    font-size: 2em;
+    font-weight: bold;
+    text-decoration: none;
+    color: black;
+}
+
+#top-header #tools {
+    display: grid;
+    grid-column: 3;
+}
+
+#top-header #tools a{
+    text-align: right;
+    text-decoration: none;
+    color: black;
+}

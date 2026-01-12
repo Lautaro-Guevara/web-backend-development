@@ -1,0 +1,126 @@
+
+main{
+    display: grid;
+    grid-template-rows: auto auto auto;
+}
+
+section.hero{
+    aspect-ratio: 1.96 / 1;
+    display: flex;
+    background-image: url('/images/vehicles/delorean.jpg'); 
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100%;
+    max-width: 1200px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: left;
+    text-align: left;
+}
+
+section.hero #hero-card{
+    display: grid;
+    background-color: rgba(255, 255, 255, 0.397);
+    color:  #17b5d6 ;
+    font-weight: bold;
+    padding: 20px;
+    width: 30%;
+    min-width: 200px;
+    justify-items: left;
+    justify-content: left;
+}
+
+section.hero #hero-card button{
+    margin-top: 15px;
+    padding: 10px 20px;
+    font-size: 1em;
+    background-color:  #17b5d6;
+    color: black;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+}
+
+/*Reviews section*/
+
+#reviews{
+    justify-content: space-around;
+    padding: 20px;
+    font-size: larger;
+    line-height: 1.5;
+}
+
+/*Upgrades section*/
+
+#upgrades-grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 20px;
+    padding: 20px;
+    justify-items: center;}
+
+#upgrades-grid div figure{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background-color: #17b5d6;
+    padding: 10px;
+    border: 1px solid black;
+    width: 80%;
+}
+
+
+
+
+/*Wide screens*/
+
+@media (min-width: 768px) {
+
+    html{
+        background-image: url('/images/site/checkerboard.jpg');
+    }
+
+    body{
+        
+        padding: 1rem;
+        margin: 3rem;
+        border: #17b5d6 5px solid;
+        border-radius: 16px;
+        background-color: white;
+    }
+
+
+    section.hero{
+        padding: 1rem;
+
+    }
+
+    section.hero #hero-card{
+        width: 30%;
+
+    }
+
+    section.base{
+        padding: 1rem;
+        display: flex;
+        justify-content: space-around;
+    }
+
+    #upgrades-grid{
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+    }
+
+    #upgrades-grid div figure{
+        width: 60%;
+    }
+
+    #reviews{
+        order: 2;
+    }
+}

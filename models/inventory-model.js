@@ -5,10 +5,12 @@ const pool = require('../database/')
  * ************************** */
 async function getClassifications(){
     try{
-        return await pool.query("SELECT * FROM public.classification ORDER BY classification_name")
+        const data = await pool.query("SELECT * FROM public.classification ORDER BY classification_name")
+        return data.rows
     }
     catch (error){
         console.error("getClassifications error: " + error)
+        return []
     }
 }
 

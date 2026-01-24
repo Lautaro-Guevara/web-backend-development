@@ -81,18 +81,7 @@ section.hero #hero-card button{
 
 @media (min-width: 768px) {
 
-    html{
-        background-image: url('/images/site/checkerboard.jpg');
-    }
 
-    body{
-        
-        padding: 1rem;
-        margin: 3rem;
-        border: #17b5d6 5px solid;
-        border-radius: 16px;
-        background-color: white;
-    }
 
 
     section.hero{

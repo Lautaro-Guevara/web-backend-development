@@ -1,0 +1,80 @@
+.vehicle-type {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 2em;
+    color: #333;
+    text-align: center;
+}
+
+#inv-display{
+    list-style-type: none;
+    margin: 2rem;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr ;
+    gap: 20px;
+    justify-content: center;
+}
+
+.inv-item{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+}
+
+.inv-item > a{
+    display: block;
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+    width: 100%;
+}
+
+.vehicle-thumbnail{
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+
+}
+
+.namePrice{
+    flex-grow: 1;
+    margin-top: 10px;
+    height: 150px;
+}
+
+.namePrice hr{
+    margin: 10px 0;
+    border: none;
+    border-top: 5px solid #333;
+}
+
+.namePrice h2 a{
+    text-decoration: none;
+    color: #333 
+}
+
+.namePrice span{
+    display: block;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    font-size: 1.5em;
+}
+
+@media screen and (min-width: 768px) {
+
+    .vehicle-type {
+    text-align: left;
+}
+
+#inv-display{
+    margin: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+
+
+}

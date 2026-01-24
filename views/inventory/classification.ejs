@@ -1,0 +1,11 @@
+<link rel="stylesheet" href="/css/inventory.css">
+
+<% if (title) { %>
+<h1 class="vehicle-type"><%= title %></h1>
+<% } else {
+  res.redirect('/')
+} %>
+
+<%# messages() %>
+
+<%- grid %>

@@ -1,17 +1,28 @@
 
-
-nav ul{
+nav ul {
     display: grid;
     background-color: #333;
     padding: 10px;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
     padding-top: 1rem;
     padding-bottom: 1rem;
 }
 
-
-nav ul li{
+nav ul li {
     display: grid;
     justify-content: center;
     color: white;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 8px 16px;
+    display: block;
+}
+
+nav ul li a:hover {
+    background-color: #575757;
+    border-radius: 4px;
 }

@@ -10,6 +10,13 @@ invCont.buildByClassificationId = async function(req, res, next){
     try{
         const classification_id = req.params.classificationId
         const data = await invModel.getInventoryByClassificationId(classification_id)
+        
+        if (!data || data.length === 0) {
+            const error = new Error("Classification not found")
+            error.status = 404
+            return next(error)
+        }
+        
         const grid = await utilities.buildClassificationGrid(data)
         let nav = await utilities.getNav()
         const className = data[0].classification_name

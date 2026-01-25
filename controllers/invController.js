@@ -32,6 +32,13 @@ invCont.buildByInvId = async function(req, res, next){
     try{
         const inv_id = req.params.invId
         const data = await invModel.getInventoryByInvId(inv_id)
+        
+        if (!data || data.length === 0) {
+            const error = new Error("Vehicle not found")
+            error.status = 404
+            return next(error)
+        }
+        
         const detail = await utilities.buildVehicleDetail(data)
         let nav = await utilities.getNav()
         const inv_year = data[0].inv_year

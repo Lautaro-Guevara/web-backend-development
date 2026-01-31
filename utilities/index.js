@@ -91,6 +91,16 @@ Util.buildVehicleDetail = async function (data){
     return detailView
 }
 
+
+// Compare password helper
+Util.comparePassword = async function (plainPassword, hashedPassword) {
+    if (!plainPassword || !hashedPassword) {
+        return false
+    }else {
+        return true
+    }
+}
+
 /* ****************************************
  * Middleware For Handling Errors
  * Wrap other function in this for 

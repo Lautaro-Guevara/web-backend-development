@@ -1,9 +1,10 @@
 <% if (title == 404) { %>
 <h1 class=""><%= title %></h1>
 <p><%= message %></p>
-<% }else if (title == 500) { %>
+<% } else if (title == 500) { %>
 <h1 class="">Server Error</h1>
 <p><%= message %></p>
-<% }else {
-  res.redirect('/')
-} %>
+<% } else { %>
+<h1 class="">Server Error</h1>
+<p><%= message %></p>
+<% } %>

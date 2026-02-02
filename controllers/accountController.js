@@ -84,38 +84,43 @@ async function registerAccount(req, res) {
 *  Process Login
 * *************************************** */
 async function loginAccount(req, res, next) {
-  let nav = await utilities.getNav()
-  const { account_email, account_password } = req.body
-  
-  // TODO: Implement login logic here
-  const account = await accountModel.getAccountByEmail(account_email)
-  console.log("Function: loginAccount --- Account:", account)
-  if (!account) {
-    console.log("Function: loginAccount --- Email does not exist")
-    req.flash("notice", "Email does not exist.")
-    res.render("account/login", {
-      title: "Login",
-      nav,
-      errors: null
-    })
-    return
+  try{
+    let nav = await utilities.getNav()
+      const { account_email, account_password } = req.body
+      
+      // TODO: Implement login logic here
+      const account = await accountModel.getAccountByEmail(account_email)
+      console.log("Function: loginAccount --- Account:", account)
+      if (!account) {
+        console.log("Function: loginAccount --- Email does not exist")
+        req.flash("notice", "Email does not exist.")
+        res.render("account/login", {
+          title: "Login",
+          nav,
+          errors: null
+        })
+        return
+      }
+      console.log("Function: loginAccount --- Account password given in the form:", account_password)
+      console.log("Function: loginAccount --- Account password from DB:", account.account_password)
+      const passwordMatch = await utilities.comparePassword(account_password, account.account_password)
+      console.log("Function: loginAccount --- Password Match:", passwordMatch)
+      if (!passwordMatch) {
+        console.log("Function: loginAccount --- Incorrect password")
+        req.flash("notice", "Incorrect password.")
+        res.render("account/login", {
+          title: "Login",
+          nav,
+          errors: null
+        })
+        return
+      }
+      req.session.account = account
+      res.status(200).send("Login successful.")
+      
+  }catch(error){
+    next(error)
   }
-  console.log("Function: loginAccount --- Account password given in the form:", account_password)
-  console.log("Function: loginAccount --- Account password from DB:", account.account_password)
-  const passwordMatch = await utilities.comparePassword(account_password, account.account_password)
-  console.log("Function: loginAccount --- Password Match:", passwordMatch)
-  if (!passwordMatch) {
-    console.log("Function: loginAccount --- Incorrect password")
-    req.flash("notice", "Incorrect password.")
-    res.render("account/login", {
-      title: "Login",
-      nav,
-      errors: null
-    })
-    return
-  }
-  req.session.account = account
-  res.redirect("/account/dashboard")
 }
 
 module.exports = { buildLogin, buildRegister, registerAccount, loginAccount }

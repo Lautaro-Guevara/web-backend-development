@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="/css/form-general.css">
+<link rel="stylesheet" href="/css/login-register.css">
+
 <h1> <%= title %> </h1>
 <%- messages() %>
 
@@ -9,6 +12,7 @@
     </ul>
 <% } %>
 
+<div class="form-container">
 <form id="loginForm" method="POST" action="/account/login">
     <label for="account_email">Email Address</label>
     <input type="email" name="account_email" id="accountEmail" required value="<%= locals.account_email %>">
@@ -18,4 +22,8 @@
 
     <button type="submit">Login</button>
 </form>
-<p>No account? <a href="/account/register">Sign up</a></p>
+</div>
+
+<div class="sign-up-link">
+    <p>No account? <a href="/account/register">Sign up</a></p>
+</div>

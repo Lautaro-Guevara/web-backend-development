@@ -1,0 +1,21 @@
+<link rel="stylesheet" href="/css/form-general.css">
+
+<h1> <%= title %> </h1>
+
+<%- messages() %>
+<% if (errors) { %>
+        <ul class="notice">
+    <% errors.array().forEach(error => { %>
+            <li><%= error.msg %></li>
+<%  }) %>
+    </ul>
+<% } %>
+
+<div class="form-container">
+    <h2>FIELD IS REQUIRED</h2>
+    <form action="/inv/add-classification" method="post">
+    <label for="classification_name">Classification Name</label>
+    <input type="text" id="classification_name" name="classification_name" placeholder="NAME MUST BE ALPHABETIC CHARACTERS ONLY" pattern="^[a-zA-Z\s]+$" required>
+    <button type="submit">Add Classification</button>
+</form>
+</div>

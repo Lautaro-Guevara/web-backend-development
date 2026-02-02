@@ -1,5 +1,6 @@
 const e = require("express")
 const invModel = require("../models/inventory-model")
+const bcrypt = require("bcryptjs")
 const Util = {}
 
 /* ***************************
@@ -92,12 +93,31 @@ Util.buildVehicleDetail = async function (data){
 }
 
 
+//---------------------
+// Create Set of Options for Drop-down Menu (Classification) - Form add-inventory.ejs
+//---------------------
+Util.buildClassificationSelect = async function (){
+    try{
+        let data = await invModel.getClassifications()
+    let options = '<option value="" disabled selected>Select a Classification</option>'
+    data.forEach(classification => {
+        options += '<option value="' + classification.classification_name + '"'
+        options += '</option>' + classification.classification_name
+    })
+    
+    return options
+    } catch (error){
+        console.error("Error building classification options: " + error)
+    }
+    
+}
+
 // Compare password helper
 Util.comparePassword = async function (plainPassword, hashedPassword) {
     if (!plainPassword || !hashedPassword) {
         return false
     }else {
-        return true
+        return await bcrypt.compare(plainPassword, hashedPassword)
     }
 }
 

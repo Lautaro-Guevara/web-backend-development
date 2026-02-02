@@ -91,7 +91,7 @@ validate.loginRules = () => {
         .custom(async (account_email) => {
             const emailExists = await accountModel.checkExistingEmail(account_email)
             if (!emailExists){
-            throw new Error("Email does not exist. Please register")
+            throw new Error("Email or password is incorrect. Please try again.")
             }
         }),
         
@@ -101,10 +101,14 @@ validate.loginRules = () => {
         .withMessage("Password is required.")
         .custom(async (account_password, { req }) => {
             const account_email = req.body.account_email
+            const emailExists = await accountModel.checkExistingEmail(account_email)
+            if (!emailExists) {
+                return true
+            }
             const storedPassword = await accountModel.checkPassword(account_email)
             const passwordIsValid = await utilities.comparePassword(account_password, storedPassword)
             if (!passwordIsValid){
-                throw new Error("Incorrect password. Please try again.")
+                throw new Error("Email or password is incorrect. Please try again.")
             }
         })
     ]

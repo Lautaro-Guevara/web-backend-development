@@ -9,6 +9,8 @@ router.get("/login", utilities.handleErrors(accountController.buildLogin))
 
 router.get("/register", utilities.handleErrors(accountController.buildRegister))
 
+router.get("/", utilities.checkLogin, utilities.handleErrors(accountController.buildAccount))
+
 // Post method for registration
 // Process the registration data
 router.post(
@@ -23,7 +25,7 @@ router.post(
   "/login",
   regValidate.loginRules(),
   regValidate.checkLoginData,
-  utilities.handleErrors(accountController.loginAccount) // loginAccount dont exist yet
+  utilities.handleErrors(accountController.accountLogin) 
 )
 
 module.exports = router

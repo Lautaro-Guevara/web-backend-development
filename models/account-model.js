@@ -34,7 +34,7 @@ async function getAccountByEmail(account_email){
     const account = await pool.query(sql, [account_email])
     return account.rows[0]
   } catch (error) {
-    return error.message
+    return new Error("No matching email found")
   }}
 
 // Check if password is correct for the given email

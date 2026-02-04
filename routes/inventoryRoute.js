@@ -41,4 +41,10 @@ router.post(
     utilities.handleErrors(invController.addVehicle) 
 )
 
+// Route to update vehicle information
+router.post(
+"/edit-inventory",
+utilities.handleErrors(invController.editInventory)
+)
+
 module.exports = router

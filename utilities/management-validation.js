@@ -155,4 +155,67 @@ validate.checkAddVehicleData = async (req, res, next) => {
     next()
 }
 
+
+// Check data and return errors or continue to adding vehicle
+validate.checkAddVehicleData = async (req, res, next) => {
+    const { classification_id, inv_make, inv_model, inv_description, inv_image, inv_thumbnail, inv_price, inv_year, inv_miles, inv_color } = req.body
+    console.log("CheckAddVehicle --  Make: " + inv_make)
+    let errors = []
+    errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        let nav = await utilities.getNav()
+        const classificationSelect = await utilities.buildClassificationSelect() // Build the classification select options
+        res.render("inventory/add-inventory", {
+            errors,
+            title: "Add Vehicle",
+            nav,
+            classificationSelect,
+            classification_id,
+            inv_make,
+            inv_model,
+            inv_description,
+            inv_image,
+            inv_thumbnail,
+            inv_price,
+            inv_year,
+            inv_miles,
+            inv_color,
+        })
+        return
+    }
+    next()
+}
+
+
+// Check data and return errors or continue to updating vehicle
+validate.checkUpdateVehicleData = async (req, res, next) => {
+    const { classification_id, inv_make, inv_model, inv_description, inv_image, inv_thumbnail, inv_price, inv_year, inv_miles, inv_color, inv_id } = req.body
+    console.log("CheckUpdateVehicle --  Make: " + inv_make)
+    let errors = []
+    errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        let nav = await utilities.getNav()
+        const classificationSelect = await utilities.buildClassificationSelect() // Build the classification select options
+        res.render("inventory/edit-inventory", {
+            errors,
+            title: "Edit Vehicle",
+            nav,
+            classificationSelect,
+            classification_id,
+            inv_make,
+            inv_model,
+            inv_description,
+            inv_image,
+            inv_thumbnail,
+            inv_price,
+            inv_year,
+            inv_miles,
+            inv_color,
+            inv_id,
+        })
+        return
+    }
+    next()
+}
+
 module.exports = validate

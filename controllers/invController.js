@@ -221,4 +221,58 @@ invCont.buildEditInventory = async function(req, res, next){
     }
 }
 
+//----------------------
+// Post - Update  - Inventory
+//----------------------
+invCont.editInventory = async function(req, res, next){
+    try{
+        const{ inv_id, classification_id, inv_make, inv_model, inv_year, inv_description, inv_image, inv_thumbnail, inv_price, inv_miles, inv_color } = req.body
+
+        console.log("editInventory controller function -- Make: " + inv_make)
+
+        const updateResult = await invModel.editInventory({
+            inv_id,
+            classification_id,
+            inv_make,
+            inv_model,
+            inv_year,
+            inv_description,
+            inv_image,
+            inv_thumbnail,
+            inv_price,
+            inv_miles,
+            inv_color
+        })
+        if (updateResult) {
+            const itemName = updateResult.inv_make + " " + updateResult.inv_model
+            req.flash("notice", `The ${itemName} was successfully updated.`)
+            res.redirect("/inv/management")
+        } else {
+            const classificationSelect = await utilities.buildClassificationList(classification_id)
+            const itemName = `${inv_make} ${inv_model}`
+            req.flash("notice", "Sorry, the insert failed.")
+            res.status(501).render("inventory/edit-inventory", {
+            title: "Edit " + itemName,
+            nav,
+            classificationSelect: classificationSelect,
+            errors: null,
+            inv_id,
+            inv_make,
+            inv_model,
+            inv_year,
+            inv_description,
+            inv_image,
+            inv_thumbnail,
+            inv_price,
+            inv_miles,
+            inv_color,
+            classification_id
+            })
+        }
+    } catch(error){
+        next(error)
+    }
+}
+
+
 module.exports = invCont

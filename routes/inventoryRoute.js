@@ -23,6 +23,8 @@ router.get("/add-vehicle", invController.buildAddVehicle)
 // Route to get inventory items based on classificationId and return as JSON
 router.get("/getInventory/:classification_id", utilities.handleErrors(invController.getInventoryJSON))
 
+router.get("/edit/:inv_id", utilities.handleErrors(invController.buildEditInventory))
+
 // Post route to add classification
 router.post(
     "/add-classification",

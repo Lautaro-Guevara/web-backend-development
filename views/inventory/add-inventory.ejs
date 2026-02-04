@@ -16,45 +16,45 @@
     <form action="/inv/add-inventory" method="post">
 
         <!-- Classification -->
-        <label for="classification_name">Classification</label>
+        <label for="classification">Classification</label>
         <select name="classification_name" id="classification" required value="<%= locals.classification_name %>">
             <%- classificationSelect %>
         </select>
 
         <!-- Make -->
-        <label for="inv_make">Make</label>
+        <label for="make">Make</label>
         <input type="text" name="inv_make" id="make" minlength="3" placeholder="Min of 3 characters" required value="<%= locals.inv_make %>">
 
         <!-- Model -->
-        <label for="inv_model">Model</label>
+        <label for="model">Model</label>
         <input type="text" name="inv_model" id="model" minlength="3" placeholder="Min of 3 characters" required value="<%= locals.inv_model %>">
 
         <!-- Description -->
-        <label for="inv_description">Description</label>
+        <label for="description">Description</label>
         <input type="text" name="inv_description" id="description" required value="<%= locals.inv_description %>">
 
         <!-- Image Path -->
-        <label for="inv_image">Image Path</label>
+        <label for="image">Image Path</label>
         <input type="text" name="inv_image" id="image" required placeholder="/images/vehicles/no-image.png" value="/images/vehicles/no-image.png" pattern="^/images/vehicles/.*$">
 
         <!-- Thumbnail Path -->
-        <label for="inv_thumbnail">Thumbnail Path</label>
+        <label for="thumbnail">Thumbnail Path</label>
         <input type="text" name="inv_thumbnail" id="thumbnail" required placeholder="/images/vehicles/no-image.png" value="/images/vehicles/no-image.png" pattern="^/images/vehicles/.*$">
 
         <!-- Price -->
-        <label for="inv_price">Price</label>
+        <label for="price">Price</label>
         <input type="text" name="inv_price" id="price" required placeholder="Decimal or Integer" pattern="^\d+(\.\d{1,2})?$" value="<%= locals.inv_price %>">
 
         <!-- Year -->
-        <label for="inv_year">Year</label>
+        <label for="year">Year</label>
         <input type="text" name="inv_year" id="year" required placeholder="4-digit year" pattern="^\d{4}$" value="<%= locals.inv_year %>">
         
         <!-- Miles -->
-        <label for="inv_miles">Miles</label>
+        <label for="miles">Miles</label>
         <input type="text" name="inv_miles" id="miles" required placeholder="digits only" pattern="^\d+$" value="<%= locals.inv_miles %>">
 
         <!-- Color -->
-        <label for="inv_color">Color</label>
+        <label for="color">Color</label>
         <input type="text" name="inv_color" id="color" required value="<%= locals.inv_color %>">
 
         <button type="submit">Add Vehicle</button>

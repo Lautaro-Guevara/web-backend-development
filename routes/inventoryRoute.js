@@ -18,7 +18,10 @@ router.get("/management/", invController.buildManagement)
 router.get("/add-classification", invController.buildAddClassification)
 
 // Route to build add Vehicle page
-router.get("/add-vehicle", invController.buildAddVehicle) // TODO create the controller function
+router.get("/add-vehicle", invController.buildAddVehicle) 
+
+// Route to get inventory items based on classificationId and return as JSON
+router.get("/getInventory/:classification_id", utilities.handleErrors(invController.getInventoryJSON))
 
 // Post route to add classification
 router.post(
@@ -31,9 +34,9 @@ router.post(
 // Route to add new vehicle
 router.post(
     "/add-inventory",
-    managementValidate.addVehicleRules(), // TODO create the validation rules
-    managementValidate.checkAddVehicleData,  // TODO create the data check function
-    utilities.handleErrors(invController.addVehicle) // TODO create the controller function
+    managementValidate.addVehicleRules(), 
+    managementValidate.checkAddVehicleData,  
+    utilities.handleErrors(invController.addVehicle) 
 )
 
 module.exports = router

@@ -103,8 +103,8 @@ Util.buildClassificationSelect = async function (){
         let data = await invModel.getClassifications()
     let options = '<option value="" disabled selected>Select a Classification</option>'
     data.forEach(classification => {
-        options += '<option value="' + classification.classification_name + '"'
-        options += '</option>' + classification.classification_name
+        options += '<option value="' + classification.classification_id + '">'
+        options += classification.classification_name + '</option>'
     })
     
     return options

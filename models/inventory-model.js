@@ -67,6 +67,20 @@ async function checkExistingClassification(classification_name){
 }
 
 // ---------------------------
+// Check Existing Classification Id
+// ---------------------------
+async function checkExistingClassificationId(classification_id){
+    try {
+        const sql = "SELECT classification_id FROM public.classification WHERE classification_id = $1"
+        const values = [classification_id]
+        const classification = await pool.query(sql, values)
+        return classification.rowCount > 0
+    } catch (error) {
+        console.error("checkExistingClassificationId error: " + error)
+    }
+}
+
+// ---------------------------
 // Add New Classification
 // ---------------------------
 async function addClassification(classification_name){
@@ -83,16 +97,16 @@ async function addClassification(classification_name){
 async function addVehicle(vehicleData){
     try {
 
-        const { classification_name, inv_make, inv_model, inv_year, inv_description, inv_image, inv_thumbnail, inv_price, inv_miles, inv_color } = vehicleData
+        const { classification_id, inv_make, inv_model, inv_year, inv_description, inv_image, inv_thumbnail, inv_price, inv_miles, inv_color } = vehicleData
 
 
         const sql = `INSERT INTO public.inventory 
         (inv_make, inv_model, inv_year, inv_description, inv_image, inv_thumbnail, inv_price, inv_miles, inv_color, classification_id) 
         VALUES 
-        ($1, $2, $3, $4, $5, $6, $7, $8, $9, (SELECT classification_id FROM public.classification WHERE classification_name = $10)) 
+        ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) 
         RETURNING *`
 
-        const values = [inv_make, inv_model, inv_year, inv_description, inv_image, inv_thumbnail, inv_price, inv_miles, inv_color, classification_name]
+        const values = [inv_make, inv_model, inv_year, inv_description, inv_image, inv_thumbnail, inv_price, inv_miles, inv_color, classification_id]
 
         const result = await pool.query(sql, values)
         
@@ -102,4 +116,4 @@ async function addVehicle(vehicleData){
     }
 }
 
-module.exports = {getClassifications, getInventoryByClassificationId, getInventoryByInvId, checkExistingClassification, addClassification, addVehicle}
+module.exports = {getClassifications, getInventoryByClassificationId, getInventoryByInvId, checkExistingClassification, checkExistingClassificationId, addClassification, addVehicle}

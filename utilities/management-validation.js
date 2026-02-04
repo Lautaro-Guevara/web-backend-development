@@ -50,13 +50,15 @@ validate.addVehicleRules = () => {
     return[
 
         // Classification name is required and must exist in DB
-        body("classification_name")
+        body("classification_id")
         .trim()
         .escape()
         .notEmpty()
         .withMessage("Please select a classification.")
-        .custom(async (classification_name) => {
-            const classExists = await inventoryModel.checkExistingClassification(classification_name)
+        .isInt({ min: 1 })
+        .withMessage("Please select a valid classification.")
+        .custom(async (classification_id) => {
+            const classExists = await inventoryModel.checkExistingClassificationId(classification_id)
             if (!classExists){
             throw new Error("Classification does not exist. Please select a valid classification.")
             }
@@ -125,7 +127,7 @@ validate.addVehicleRules = () => {
 
 // Check data and return errors or continue to adding vehicle
 validate.checkAddVehicleData = async (req, res, next) => {
-    const { classification_name, inv_make, inv_model, inv_description, inv_image, inv_thumbnail, inv_price, inv_year, inv_miles, inv_color } = req.body
+    const { classification_id, inv_make, inv_model, inv_description, inv_image, inv_thumbnail, inv_price, inv_year, inv_miles, inv_color } = req.body
     console.log("CheckAddVehicle --  Make: " + inv_make)
     let errors = []
     errors = validationResult(req)
@@ -137,7 +139,7 @@ validate.checkAddVehicleData = async (req, res, next) => {
             title: "Add Vehicle",
             nav,
             classificationSelect,
-            classification_name,
+            classification_id,
             inv_make,
             inv_model,
             inv_description,

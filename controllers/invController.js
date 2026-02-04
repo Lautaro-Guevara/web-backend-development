@@ -71,9 +71,12 @@ invCont.buildByInvId = async function(req, res, next){
 invCont.buildManagement = async function(req, res, next){
     try{
         let nav = await utilities.getNav()
+        const classificationSelect = await utilities.buildClassificationSelect()
         res.render("./inventory/management", {
             title: "Inventory Management",
             nav,
+            classificationSelect,
+            errors: null,
         })
     } catch(error){
         next(error)
@@ -140,12 +143,12 @@ invCont.addClassification = async function(req, res, next){
 //----------------------
 invCont.addVehicle = async function(req, res, next){
     try{
-        const{ classification_name, inv_make, inv_model, inv_year, inv_description, inv_image, inv_thumbnail, inv_price, inv_miles, inv_color } = req.body
+        const{ classification_id, inv_make, inv_model, inv_year, inv_description, inv_image, inv_thumbnail, inv_price, inv_miles, inv_color } = req.body
 
         console.log("addVehicle controller function -- Make: " + inv_make)
 
         const addResult = await invModel.addVehicle({
-            classification_name,
+            classification_id,
             inv_make,
             inv_model,
             inv_year,
@@ -165,6 +168,19 @@ invCont.addVehicle = async function(req, res, next){
         }
     } catch(error){
         next(error)
+    }
+}
+
+/* ***************************
+ *  Return Inventory by Classification As JSON
+ * ************************** */
+invCont.getInventoryJSON = async (req, res, next) => {
+    const classification_id = parseInt(req.params.classification_id)
+    const invData = await invModel.getInventoryByClassificationId(classification_id)
+    if (invData[0].inv_id) {
+    return res.json(invData)
+    } else {
+    next(new Error("No data returned"))
     }
 }
 

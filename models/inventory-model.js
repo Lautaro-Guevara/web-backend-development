@@ -143,4 +143,26 @@ async function editInventory(vehicleData){
     }
 }
 
-module.exports = {getClassifications, getInventoryByClassificationId, getInventoryByInvId, checkExistingClassification, checkExistingClassificationId, addClassification, addVehicle, editInventory}
+// ---------------------------
+// Delete inventory vehicle
+// ---------------------------
+async function deleteInventory(vehicleData){
+    try {
+
+        const { inv_id } = vehicleData
+
+
+        const sql = `DELETE FROM public.inventory 
+        WHERE inv_id = $1
+        RETURNING *`
+
+        const values = [inv_id]
+        const result = await pool.query(sql, values)
+        
+        return result
+    } catch (error) {
+        console.error("deleteInventory error: " + error)
+    }
+}
+
+module.exports = {getClassifications, getInventoryByClassificationId, getInventoryByInvId, checkExistingClassification, checkExistingClassificationId, addClassification, addVehicle, editInventory, deleteInventory}

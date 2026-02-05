@@ -1,0 +1,39 @@
+<link rel="stylesheet" href="/css/form-general.css">
+
+<h1> <%= title %> </h1>
+
+<%- messages() %>
+<% if (errors) { %>
+        <ul class="notice">
+    <% errors.array().forEach(error => { %>
+            <li><%= error.msg %></li>
+<%  }) %>
+    </ul>
+<% } %>
+
+<div class="form-container">
+    <h2>THE NEXT VEHICLE WILL BE DELETED</h2>
+    <form action="/inv/delete-inventory" method="post">
+
+        <!-- Make -->
+        <label for="make">Make</label>
+        <input type="text" name="inv_make" id="make" minlength="3" placeholder="Min of 3 characters" required value="<%= locals.inv_make %>" readonly>
+
+        <!-- Model -->
+        <label for="model">Model</label>
+        <input type="text" name="inv_model" id="model" minlength="3" placeholder="Min of 3 characters" required value="<%= locals.inv_model %>" readonly>
+        <!-- Price -->
+        <label for="price">Price</label>
+        <input type="text" name="inv_price" id="price" required placeholder="Decimal or Integer" pattern="^\d+(\.\d{1,2})?$" value="<%= locals.inv_price %>" readonly>
+
+        <!-- Year -->
+        <label for="year">Year</label>
+        <input type="text" name="inv_year" id="year" required placeholder="4-digit year" pattern="^\d{4}$" value="<%= locals.inv_year %>" readonly>
+
+        <p>Confirm Deletion - The delete is permanent.</p>
+        <button type="submit">Delete Vehicle</button>
+
+        <input type="hidden" name="inv_id" value="<%= locals.inv_id %>">
+    </form>
+</div>
+

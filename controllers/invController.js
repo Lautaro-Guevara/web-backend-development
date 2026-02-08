@@ -19,10 +19,12 @@ invCont.buildByClassificationId = async function(req, res, next){
         
         const grid = await utilities.buildClassificationGrid(data)
         let nav = await utilities.getNav()
+        let loginLink = await utilities.buildLoginLink(req, res)
         const className = data[0].classification_name
         res.render("./inventory/classification", {
             title: className + " vehicles",
             nav,
+            loginLink,
             grid,
         })
     }
@@ -48,6 +50,7 @@ invCont.buildByInvId = async function(req, res, next){
         
         const detail = await utilities.buildVehicleDetail(data)
         let nav = await utilities.getNav()
+        let loginLink = await utilities.buildLoginLink(req, res)
         const inv_year = data[0].inv_year
         const makeName = data[0].inv_make
         const modelName = data[0].inv_model
@@ -56,6 +59,7 @@ invCont.buildByInvId = async function(req, res, next){
         res.render("./inventory/detail", {
             title: inv_year + " " + makeName + " " + modelName,
             nav,
+            loginLink,
             detail,
     })
     }
@@ -71,11 +75,13 @@ invCont.buildByInvId = async function(req, res, next){
 invCont.buildManagement = async function(req, res, next){
     try{
         let nav = await utilities.getNav()
+        let loginLink = await utilities.buildLoginLink(req, res)
         const classificationSelect = await utilities.buildClassificationSelect()
         res.render("./inventory/management", {
             title: "Inventory Management",
             nav,
             classificationSelect,
+            loginLink,
             errors: null,
         })
     } catch(error){
@@ -89,9 +95,11 @@ invCont.buildManagement = async function(req, res, next){
 invCont.buildAddClassification = async function(req, res, next){
     try{
         let nav = await utilities.getNav()
+        let loginLink = await utilities.buildLoginLink(req, res)
         res.render("./inventory/add-classification", {
             title: "Inventory Management",
             nav,
+            loginLink,
             errors: null,
         })
     } catch(error){
@@ -106,10 +114,12 @@ invCont.buildAddVehicle = async function(req, res, next){
     try{
         let nav = await utilities.getNav()
         const classificationSelect = await utilities.buildClassificationSelect() // Build the classification select options - Done
+        let loginLink = await utilities.buildLoginLink(req, res)
         console.log("buildAddVehicle function -- Classification:" + classificationSelect);
         res.render("./inventory/add-inventory", {
             title: "Add Vehicle",
             nav,
+            loginLink,
             classificationSelect,
             errors: null,
         })
@@ -192,6 +202,7 @@ invCont.buildEditInventory = async function(req, res, next){
         const inventory_id = parseInt(req.params.inv_id)
         console.log("buildEditInventory -- Inventory ID: " + inventory_id)
         let nav = await utilities.getNav()
+        let loginLink = await utilities.buildLoginLink(req, res)
         const itemData = await invModel.getInventoryByInvId(inventory_id)
         const classificationSelect = await utilities.
         buildClassificationSelect() 
@@ -202,6 +213,7 @@ invCont.buildEditInventory = async function(req, res, next){
         res.render("./inventory/edit-inventory", {
             title: "Edit " + itemName,
             nav,
+            loginLink,
             classificationSelect,
             errors: null,
             inv_id: itemData[0].inv_id,
@@ -254,6 +266,7 @@ invCont.editInventory = async function(req, res, next){
             res.status(501).render("inventory/edit-inventory", {
             title: "Edit " + itemName,
             nav,
+            loginLink,
             classificationSelect: classificationSelect,
             errors: null,
             inv_id,
@@ -283,9 +296,8 @@ invCont.buildDeleteInventory = async function(req, res, next){
         const inventory_id = parseInt(req.params.inv_id)
         console.log("buildDeleteInventory -- Inventory ID: " + inventory_id)
         let nav = await utilities.getNav()
+        let loginLink = await utilities.buildLoginLink(req, res)
         const itemData = await invModel.getInventoryByInvId(inventory_id)
-        const classificationSelect = await utilities.
-        buildClassificationSelect() 
 
         const itemName = itemData[0].inv_make + " " + itemData[0].inv_model
 
@@ -293,6 +305,7 @@ invCont.buildDeleteInventory = async function(req, res, next){
         res.render("./inventory/delete-confirm", {
             title: "Delete " + itemName,
             nav,
+            loginLink,
             errors: null,
             inv_id: itemData[0].inv_id,
             inv_make: itemData[0].inv_make,
@@ -331,6 +344,7 @@ invCont.deleteInventory = async function(req, res, next){
             res.status(501).render("inventory/delete-confirm", {
             title: "Delete " + itemName,
             nav,
+            loginLink,
             classificationSelect: classificationSelect,
             errors: null,
             inv_id,

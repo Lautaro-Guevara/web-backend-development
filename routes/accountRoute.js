@@ -11,6 +11,8 @@ router.get("/register", utilities.handleErrors(accountController.buildRegister))
 
 router.get("/", utilities.checkLogin, utilities.handleErrors(accountController.buildAccount))
 
+router.get("/edit-info/:account_id", utilities.checkLogin, utilities.handleErrors(accountController.buildEditInfo))
+
 // Post method for registration
 // Process the registration data
 router.post(
@@ -27,5 +29,24 @@ router.post(
   regValidate.checkLoginData,
   utilities.handleErrors(accountController.accountLogin) 
 )
+
+// Edit account information
+router.post(
+  "/edit-info",
+  regValidate.editInfoRules(),
+  regValidate.checkEditInfoData,
+  utilities.handleErrors(accountController.editInfo)
+)
+
+// Edit account password
+router.post(
+  "/edit-password",
+  regValidate.editPasswordRules(),
+  regValidate.checkEditPasswordData,
+  utilities.handleErrors(accountController.editPassword)
+)
+
+// Logout route - GET
+router.get("/logout", utilities.handleErrors(accountController.accountLogout))
 
 module.exports = router

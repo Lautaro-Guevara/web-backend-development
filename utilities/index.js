@@ -30,6 +30,19 @@ Util.getNav = async function(req, res, next){
     return list
 }
 
+//------------------------------
+// Build login link depending on login status
+//------------------------------
+Util.buildLoginLink = async function (req, res){
+    try{
+    if (res.locals.loggedin){
+        return '<a href="/account/" title="Account Management">Welcome Basic</a>  <a href="/account/logout" title="Logout of your account">Logout</a>'
+    }
+    return '<a href="/account/login" title="Login to your account">My Account</a>'
+} catch (error){
+    console.error("Error building login link: " + error)
+    return '<a href="/account/login" title="Login to your account">My Account</a>'
+}}
 
 /* **************************************
 * Build the classification view HTML
@@ -153,6 +166,18 @@ Util.checkJWTToken = (req, res, next) => {
     }
 }
 
+//-----------------------------
+// Middleware to check if user have authorization to access admin and employee routes (same privileges) using account type from JWT token
+//-----------------------------
+Util.checkAdminEmployee = (req, res, next) => {
+    if (res.locals.accountData && (res.locals.accountData.account_type === "Admin" || res.locals.accountData.account_type === "Employee")){
+        next()
+    } else {
+        req.flash("notice", "You do not have permission to access this page.")
+        return res.redirect("/account/login")
+    }
+}
+
 /* ****************************************
  *  Check Login
  * ************************************ */
@@ -164,5 +189,35 @@ Util.checkLogin = (req, res, next) => {
         return res.redirect("/account/login")
     }
 }
+
+//---------------------------------------------
+// Check if user is logged in
+//---------------------------------------------
+Util.isLoggedIn = (req, res, next) => {
+    if (res.locals.loggedin){
+        return true
+    }
+    return false
+}
+
+//---------------------------------------------
+// Build content for management view
+//---------------------------------------------
+Util.buildManagementContent = async function (req, res){
+    let content = ""
+    let accountType = res.locals.accountData ? res.locals.accountData.account_type : ""
+
+    content += "<h2>You are logged in - Welcome " + res.locals.accountData.account_firstname + "!</h2>"
+    content += "<p><a href='/account/edit-info/" + res.locals.accountData.account_id + "' title='Update Account Information'>Update Account Information</a></p>"
+
+    if (accountType === "Admin" || accountType === "Employee"){
+        content += "<h3>Inventory Management</h3>"
+        content += "<p><a href='/inv/management/'>Inventory Management</a></p>"
+        return content
+    } else {
+        return content
+    }
+}
+
 
 module.exports = Util

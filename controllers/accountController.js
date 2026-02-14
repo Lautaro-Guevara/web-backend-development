@@ -252,7 +252,9 @@ async function editPassword(req, res) {
     console.log(`AccountController - editPassword --- Password change successful for account ID: ${account_id}`)
     req.flash("notice", "Password changed successfully.")
     res.redirect("/account")
-  } else {
+  } 
+  else 
+    {
     console.log("AccountController - editPassword --- Password change failed for account ID:", account_id)
     req.flash("notice", "Sorry, there was an error changing your password.")
     res.status(501).render("account/edit-info", {

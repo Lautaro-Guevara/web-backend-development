@@ -1,5 +1,7 @@
 const e = require("express")
 const invModel = require("../models/inventory-model")
+const accountModel = require("../models/account-model")
+const appointmentModel = require("../models/appointment-model")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 require("dotenv").config()
@@ -206,17 +208,108 @@ Util.isLoggedIn = (req, res, next) => {
 Util.buildManagementContent = async function (req, res){
     let content = ""
     let accountType = res.locals.accountData ? res.locals.accountData.account_type : ""
+    appointmentModel.deleteExpiredAppointments()
 
     content += "<h2>You are logged in - Welcome " + res.locals.accountData.account_firstname + "!</h2>"
     content += "<p><a href='/account/edit-info/" + res.locals.accountData.account_id + "' title='Update Account Information'>Update Account Information</a></p>"
 
+    if (accountType === "Client"){
+        let appointments = await appointmentModel.getAppointmentsByClientId(res.locals.accountData.account_id)
+        content += "<h3>Visit Us!</h3>"
+
+        if(appointments.length === 0){
+            content += "<p>You currently have no appointments scheduled. Click the link below to schedule an appointment with one of our representatives.</p>"
+            content += "<p><a href='/appointments/schedule/' title='Schedule an appointment'>Schedule an appointment</a></p>"
+            console.log("Appointments for client ID " + res.locals.accountData.account_id + ":", appointments)
+        }
+        
+
+
+        if(appointments.length > 0){
+
+            content += "<h3>Your Appointments</h3>"
+            appointments.forEach(appointment => {
+            const appointmentDateFormatter = new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+            const appointmentTimeFormatter = new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
+
+            const appoointmentDate = appointmentDateFormatter.format(new Date(appointment.appointment_date))
+            const appointmentTime = appointmentTimeFormatter.format(new Date(`1970-01-01T${appointment.appointment_time}`))
+            
+            
+                content += "<p>" + appoointmentDate + " at " + appointmentTime + " - with " + appointment.employee_first_name + " " + appointment.employee_last_name + " - Reason: " + appointment.appointment_reason + " | <a href='/appointments/cancel/" + appointment.appointment_id + "' title='Cancel appointment'>Cancel</a></p>"
+            })
+        }
+
+        return content
+    }
+    
+
     if (accountType === "Admin" || accountType === "Employee"){
         content += "<h3>Inventory Management</h3>"
         content += "<p><a href='/inv/management/'>Inventory Management</a></p>"
+
+        
+
+        if (accountType === "Employee"){
+
+            const appointments = await appointmentModel.getAppointmentsByEmployeeId(res.locals.accountData.account_id)
+
+            if (appointments.length > 0){
+
+                appointments.forEach(appointment => {
+                const appointmentDateFormatter = new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+                const appointmentTimeFormatter = new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
+
+                const appoointmentDate = appointmentDateFormatter.format(new Date(appointment.appointment_date))
+                const appointmentTime = appointmentTimeFormatter.format(new Date(`1970-01-01T${appointment.appointment_time}`))
+
+                content += "<h3>Yours Next Appointment</h3>"
+                content += "<p> " + appoointmentDate + " at " + appointmentTime + " - With " + appointment.client_first_name + " " + appointment.client_last_name + " - Reason: " + appointment.appointment_reason + " </p>"
+            })
+        }
+
         return content
     } else {
         return content
     }
+}}
+
+//---------------------------------------------
+// Build Select options for employee representatives in appointment scheduling form
+//---------------------------------------------
+Util.buildEmployeeSelect = async function (){
+    try{
+        let data = await accountModel.getEmployeesById()
+        let options = '<option value="" disabled selected>Select a Representative</option>'
+        data.forEach(employee => {
+            options += '<option value="' + employee.account_id + '">'
+            options += employee.account_firstname + ' ' + employee.account_lastname + '</option>'
+        })
+        return options
+    } catch (error) {
+        console.error("Error building employee select options:", error)
+        return '<option value="" disabled selected>No representatives available</option>'
+    }
+}
+
+//---------------------------------
+// Build Select options for time selection in appointment scheduling form - Only aveilable time slots within business hours (9:00 AM to 4:00 PM) will be shown
+//---------------------------------
+Util.buildTimeSelect = async function (employee_account_id, appointment_date){
+    let options = '<option value="" disabled selected>Select a Time</option>'
+
+    for (let hour = 9; hour <= 16; hour++) {
+        //
+        for (let minute = 0; minute < 60; minute += 30) {
+            const timeValue = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`
+            const conflict = await appointmentModel.checkAppointmentConflict(employee_account_id, appointment_date, timeValue)
+            if (!conflict) {
+                const timeLabel = new Date(`1970-01-01T${timeValue}`).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
+                options += `<option value="${timeValue}">${timeLabel}</option>`
+            }
+        }
+    }
+    return options
 }
 
 

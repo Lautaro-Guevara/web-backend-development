@@ -1,0 +1,20 @@
+<link rel="stylesheet" href="/css/form-general.css">
+
+<h1> <%= title %> </h1>
+<%- messages() %>
+
+<% if (errors) { %>
+        <ul class="notice">
+    <% errors.array().forEach(error => { %>
+            <li><%= error.msg %></li>
+<%  }) %>
+    </ul>
+<% } %>
+
+<div class="form-container">
+<form id="cancelForm" method="POST" action="/appointments/cancel/<%= appointment.appointment_id %>">
+    <p>Are you sure you want to cancel your appointment with <strong><%= appointment.employee_first_name %> <%= appointment.employee_last_name %></strong> on <strong><%= appointment.appointment_date %></strong> at <strong><%= appointment.appointment_time %></strong>?</p>
+    <button type="submit">Yes, Cancel Appointment</button>
+    <a href="/account" class="cancel-link">No, Keep Appointment</a>
+</form>
+</div>

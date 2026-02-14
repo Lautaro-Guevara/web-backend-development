@@ -83,4 +83,17 @@ async function editPassword(account_id, account_password){
   }
 }
 
-module.exports = { registerAccount, checkExistingEmail, checkPassword, getAccountByEmail, getAccountById, editInfo, editPassword }
+//-------------------------------------------------------------
+// Get all employees by employee_id
+//-----------------------------------------------
+async function getEmployeesById(){
+  try {
+    const sql = "SELECT account_id, account_firstname, account_lastname FROM account WHERE account_type = 'Employee'"
+    const employees = await pool.query(sql)
+    return employees.rows
+  } catch (error) {
+    return error.message
+  }
+}
+
+module.exports = { registerAccount, checkExistingEmail, checkPassword, getAccountByEmail, getAccountById, editInfo, editPassword, getEmployeesById }

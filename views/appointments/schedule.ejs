@@ -1,0 +1,41 @@
+<link rel="stylesheet" href="/css/form-general.css">
+<script src="/js/appointment.js"></script>
+
+<h1> <%= title %> </h1>
+<%- messages() %>
+
+<% if (errors) { %>
+        <ul class="notice">
+    <% errors.array().forEach(error => { %>
+            <li><%= error.msg %></li>
+<%  }) %>
+    </ul>
+<% } %>
+
+<div class="form-container">
+<form id="scheduleForm" method="POST" action="/appointments/schedule">
+
+    <label for="representative">Representative</label>
+    <select name="employee_account_id" id="representative">
+        <%- employeeSelect %>
+    </select>
+
+    <label for="appointment_date">Date</label>
+    <input type="date" name="appointment_date" id="appointment_date" required value="<%= locals.appointment_date %>">
+
+    <label for="appointment_time">Time</label>
+    <select name="appointment_time" id="appointment_time" required disabled>
+        <option value="">Select a date first</option>
+        <%- timeSelect %>
+    </select>
+
+    
+
+    <label for="appointment_reason">Reason for Appointment</label>
+    <textarea name="appointment_reason" id="appointment_reason" required><%= locals.appointment_reason %></textarea>
+
+    <button type="submit">Schedule Appointment</button>
+
+    <input type="hidden" name="client_account_id" value="<%= locals.accountData ? locals.accountData.account_id : "" %>">
+</form>
+</div>
